@@ -1,0 +1,18 @@
+path: data/carparts_yolo_annotations
+train: images/train
+val: images/val 
+
+names:
+  0: _background_
+  1: back_bumper
+  2: back_door
+  3: back_glass
+  4: back_light
+  5: front_bumper
+  6: front_door
+  7: front_glass
+  8: front_light
+  9: hood
+  10: mirror
+  11: trunk_tailgate
+  12: wheel
