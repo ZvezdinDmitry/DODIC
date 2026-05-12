@@ -219,6 +219,7 @@ __marimo__/
 
 data
 data/*
+data2/*
 runs
 *-seg.pt
 mlflow_logs

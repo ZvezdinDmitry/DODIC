@@ -132,8 +132,8 @@ def process_carparts_to_yolo(path_raw: str | Path, path_result: str | Path):
         path_raw / "testset/testset/JPEGImages",
         Path(path_result) / "images/val",
     )
-    shutil.copy("configs/carparts.yaml", Path(path_result) / " cardd.yaml")
-    shutil.rmtree(path_raw)
+    shutil.copy("configs/carparts.yaml", Path(path_result) / "carparts.yaml")
+    # shutil.rmtree(path_raw)
     print("Carparts converted successfully!")
 
 
@@ -164,8 +164,8 @@ def process_cardd_to_yolo(path_raw: str | Path, path_result: str | Path):
         path_raw / "test",
         path_result / "images/test",
     )
-    shutil.copy("configs/cardd.yaml", path_result / " cardd.yaml")
-    shutil.rmtree(path_raw)
+    shutil.copy("configs/cardd.yaml", path_result / "cardd.yaml")
+    # shutil.rmtree(path_raw)
     print("CarDD converted successfully!")
 
 
