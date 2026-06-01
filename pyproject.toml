@@ -6,9 +6,11 @@ readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "albumentations>=2.0.8",
+    "fastapi[standard]>=0.136.3",
     "ipykernel>=7.2.0",
     "kagglehub>=1.0.1",
     "mlflow==2.20.2",
     "protobuf==5.29.6",
+    "python-multipart>=0.0.29",
     "ultralytics>=8.4.47",
 ]
