@@ -14,9 +14,11 @@ from fastapi import (
     status,
 )
 from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
 
 # from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+from starlette.concurrency import run_in_threadpool
 
 from api.images_processing import fig_to_base64
 
@@ -24,9 +26,11 @@ from api.images_processing import fig_to_base64
 from api.models_inference import get_model
 
 APP_STATS = {"total_requests": 0, "total_time": 0.0}
+MAX_FILE_SIZE = 1 * 1024 * 1024
 
 app = FastAPI()
-# app.mount("/static", StaticFiles(directory="static"))
+app.mount("/static", StaticFiles(directory="static"))
+
 templates = Jinja2Templates(directory="templates")
 
 
@@ -35,13 +39,6 @@ def get_index(request: Request) -> Response:
     return templates.TemplateResponse(request, "index.html")
 
 
-MAX_FILE_SIZE = 1 * 1024 * 1024
-
-
-# make random image stuff - add possibility to select exact image - sort images in a function via a Depends
-# with HTTP exceptions like this file doesnt exist
-# make cliclable buttons
-# make async?
 # mb add pure api section (think about routing) + pydantic
 @app.post("/", response_class=HTMLResponse)
 async def infer_model(
@@ -58,6 +55,13 @@ async def infer_model(
         damages = []
         file_bytes = await file.read()
         file_size = len(file_bytes)
+
+        if file_size == 0:
+            ctx.update(
+                error="Файл не был отправлен или сессия истекла. Пожалуйста, выберите изображение заново."
+            )
+            return templates.TemplateResponse(request, "index.html", ctx)
+
         if file_size > MAX_FILE_SIZE:
             raise HTTPException(
                 status_code=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE,
@@ -65,9 +69,10 @@ async def infer_model(
             )
         image = np.frombuffer(file_bytes, np.uint8)
         image = cv2.imdecode(image, cv2.IMREAD_COLOR)
-        damages_img, mapped_damages = model.annotate(
-            image, part_overlap, part_conf, damage_conf
+        damages_img, mapped_damages = await run_in_threadpool(
+            model.annotate, image, part_overlap, part_conf, damage_conf
         )
+
         for damage_type, part, confidence in mapped_damages:
             # draw.highlight_word(coords, word)
             # cropped_word_image = draw.crop(coords)
@@ -85,8 +90,9 @@ async def infer_model(
         average_request_time = (
             APP_STATS["total_time"] / APP_STATS["total_requests"]
         )
+        base64_image = await run_in_threadpool(fig_to_base64, damages_img)
         ctx.update(
-            image=fig_to_base64(damages_img),
+            image=base64_image,
             damages=damages,
             current_time=round(current_request_time, 3),
             average_time=round(average_request_time, 3),

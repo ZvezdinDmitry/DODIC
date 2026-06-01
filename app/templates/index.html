@@ -22,24 +22,86 @@
 
 <body>
   
-  <!-- <header class="py-5 text-center bg-white border-bottom shadow-sm mb-5">
-      <div class="container">
-        <h1 class="display-4 fw-bold text-primary mb-2">DODIC</h1>
-        <p class="lead text-muted mb-0">Интеллектуальная детекция автомобильных повреждений</p>
-      </div>
-    </header> -->
     <header class="py-5 text-center mb-5" style="background: linear-gradient(135deg, #f0f4fe 0%, #e2ecff 100%); border-bottom: 1px solid #d2e1ff; shadow: inset 0 -2px 5px rgba(0,0,0,0.02);">
     <div class="container">
-      <!-- <div class="mb-2 d-inline-block p-3 bg-white rounded-circle shadow-sm" style="color: #0d6efd;">
-        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-cpu" viewBox="0 0 16 16">
-          <path d="M5 0a.5.5 0 0 1 .5.5V2h1V.5a.5.5 0 0 1 1 0V2h1V.5a.5.5 0 0 1 1 0V2h1V.5a.5.5 0 0 1 1 0V2h.5a.5.5 0 0 1 .5.5v1h1.5a.5.5 0 0 1 0 1H14v1h1.5a.5.5 0 0 1 0 1H14v1h1.5a.5.5 0 0 1 0 1H14v1h1.5a.5.5 0 0 1 0 1H14v.5a.5.5 0 0 1-.5.5H14v1.5a.5.5 0 0 1-1 0V14h-1v1.5a.5.5 0 0 1-1 0V14h-1v1.5a.5.5 0 0 1-1 0V14h-1v1.5a.5.5 0 0 1-1 0V14h-.5a.5.5 0 0 1-.5-.5V14H2.5a.5.5 0 0 1 0-1H2v-1H.5a.5.5 0 0 1 0-1H2v-1H.5a.5.5 0 0 1 0-1H2V7H.5a.5.5 0 0 1 0-1H2V5H.5a.5.5 0 0 1 0-1H2v-.5a.5.5 0 0 1 .5-.5H2V1.5a.5.5 0 0 1 1 0V2h1V.5A.5.5 0 0 1 5 0m-.5 3v10.5A.5.5 0 0 0 5 14h10.5a.5.5 0 0 0 .5-.5V3a.5.5 0 0 0-.5-.5H5a.5.5 0 0 0-.5.5M5.5 4h5a.5.5 0 0 1 .5.5v5a.5.5 0 0 1-.5.5h-5a.5.5 0 0 1-.5-.5v-5a.5.5 0 0 1 .5-.5"/>
-        </svg>
-      </div> -->
       
       <h1 class="display-4 fw-bold text-dark mb-2" style="letter-spacing: -1px;">DODIC</h1>
       <p class="lead text-secondary mx-auto mb-0" style="max-width: 600px; font-weight: 500;">
         Интеллектуальная детекция автомобильных повреждений
       </p>
+
+      <!-- <div class="d-flex justify-content-center align-items-center gap-2 flex-wrap mt-2">
+          <span class="text-muted small fw-medium me-2">Демо:</span>
+          <button type="button" class="btn btn-sm btn-outline-primary bg-white shadow-sm" onclick="runTestImage('/static/000034.jpg', '000034.jpg')">Фото 1</button>
+          <button type="button" class="btn btn-sm btn-outline-primary bg-white shadow-sm" onclick="runTestImage('/static/000407.jpg', '000407.jpg')">Фото 2</button>
+          <button type="button" class="btn btn-sm btn-outline-primary bg-white shadow-sm" onclick="runTestImage('/static/000423.jpg', '000423.jpg')">Фото 3</button>
+          <button type="button" class="btn btn-sm btn-outline-primary bg-white shadow-sm" onclick="runTestImage('/static/26730695705_damaged.jpg', '26730695705_damaged.jpg')">Фото 4</button>
+          <button type="button" class="btn btn-sm btn-outline-primary bg-white shadow-sm" onclick="runTestImage('/static/47843859598_undamaged.jpg', '47843859598_undamaged.jpg')">Фото 5</button>
+          <button type="button" class="btn btn-sm btn-outline-primary bg-white shadow-sm" onclick="runTestImage('/static/49282650935_damaged.jpg', '49282650935_damaged.jpg')">Фото 6</button>
+          <button type="button" class="btn btn-sm btn-outline-primary bg-white shadow-sm" onclick="runTestImage('/static/51756907402_damaged.jpg', '51756907402_damaged.jpg')">Фото 7</button>
+      </div> -->
+      <div class="mt-2">
+        <!-- <div class="text-muted small fw-medium mb-2">Демо картинки:</div> -->
+        <div class="d-flex justify-content-center align-items-center gap-3 flex-wrap">
+          
+          <button type="button" class="btn p-0 border border-2 border-white rounded-3 shadow-sm overflow-hidden ratio ratio-1x1" 
+                  style="width: 64px; height: 64px; transition: all 0.2s;"
+                  onclick="runTestImage('/static/000034.jpg', '000034.jpg')"
+                  onmouseover="this.style.transform='scale(1.15)'; this.style.borderColor='#0d6efd';"
+                  onmouseout="this.style.transform='scale(1)'; this.style.borderColor='#fff';">
+            <img src="/static/000034.jpg" style="object-fit: cover; width: 100%; height: 100%;" alt="Фото 1">
+          </button>
+
+          <button type="button" class="btn p-0 border border-2 border-white rounded-3 shadow-sm overflow-hidden ratio ratio-1x1" 
+                  style="width: 64px; height: 64px; transition: all 0.2s;"
+                  onclick="runTestImage('/static/000407.jpg', '000407.jpg')"
+                  onmouseover="this.style.transform='scale(1.15)'; this.style.borderColor='#0d6efd';"
+                  onmouseout="this.style.transform='scale(1)'; this.style.borderColor='#fff';">
+            <img src="/static/000407.jpg" style="object-fit: cover; width: 100%; height: 100%;" alt="Фото 2">
+          </button>
+
+          <button type="button" class="btn p-0 border border-2 border-white rounded-3 shadow-sm overflow-hidden ratio ratio-1x1" 
+                  style="width: 64px; height: 64px; transition: all 0.2s;"
+                  onclick="runTestImage('/static/000423.jpg', '000423.jpg')"
+                  onmouseover="this.style.transform='scale(1.15)'; this.style.borderColor='#0d6efd';"
+                  onmouseout="this.style.transform='scale(1)'; this.style.borderColor='#fff';">
+            <img src="/static/000423.jpg" style="object-fit: cover; width: 100%; height: 100%;" alt="Фото 3">
+          </button>
+
+          <button type="button" class="btn p-0 border border-2 border-white rounded-3 shadow-sm overflow-hidden ratio ratio-1x1" 
+                  style="width: 64px; height: 64px; transition: all 0.2s;"
+                  onclick="runTestImage('/static/26730695705_damaged.jpg', '26730695705_damaged.jpg')"
+                  onmouseover="this.style.transform='scale(1.15)'; this.style.borderColor='#0d6efd';"
+                  onmouseout="this.style.transform='scale(1)'; this.style.borderColor='#fff';">
+            <img src="/static/26730695705_damaged.jpg" style="object-fit: cover; width: 100%; height: 100%;" alt="Фото 4">
+          </button>
+
+          <button type="button" class="btn p-0 border border-2 border-white rounded-3 shadow-sm overflow-hidden ratio ratio-1x1" 
+                  style="width: 64px; height: 64px; transition: all 0.2s;"
+                  onclick="runTestImage('/static/47843859598_undamaged.jpg', '47843859598_undamaged.jpg')"
+                  onmouseover="this.style.transform='scale(1.15)'; this.style.borderColor='#0d6efd';"
+                  onmouseout="this.style.transform='scale(1)'; this.style.borderColor='#fff';">
+            <img src="/static/47843859598_undamaged.jpg" style="object-fit: cover; width: 100%; height: 100%;" alt="Фото 5">
+          </button>
+
+          <button type="button" class="btn p-0 border border-2 border-white rounded-3 shadow-sm overflow-hidden ratio ratio-1x1" 
+                  style="width: 64px; height: 64px; transition: all 0.2s;"
+                  onclick="runTestImage('/static/49282650935_damaged.jpg', '49282650935_damaged.jpg')"
+                  onmouseover="this.style.transform='scale(1.15)'; this.style.borderColor='#0d6efd';"
+                  onmouseout="this.style.transform='scale(1)'; this.style.borderColor='#fff';">
+            <img src="/static/49282650935_damaged.jpg" style="object-fit: cover; width: 100%; height: 100%;" alt="Фото 6">
+          </button>
+
+          <button type="button" class="btn p-0 border border-2 border-white rounded-3 shadow-sm overflow-hidden ratio ratio-1x1" 
+                  style="width: 64px; height: 64px; transition: all 0.2s;"
+                  onclick="runTestImage('/static/51756907402_damaged.jpg', '51756907402_damaged.jpg')"
+                  onmouseover="this.style.transform='scale(1.15)'; this.style.borderColor='#0d6efd';"
+                  onmouseout="this.style.transform='scale(1)'; this.style.borderColor='#fff';">
+            <img src="/static/51756907402_damaged.jpg" style="object-fit: cover; width: 100%; height: 100%;" alt="Фото 7">
+          </button>
+
+        </div>
+      </div>
     </div>
   </header>
     
@@ -57,7 +119,7 @@
       <div class="card-body p-4 p-md-5">
         <h4 class="card-title mb-4 fw-semibold">Настройки анализа</h4>
         
-        <form method="POST" enctype="multipart/form-data">
+        <form id="uploadForm" method="POST" enctype="multipart/form-data">
           <div class="mb-4">
             <label for="formFile" class="form-label fw-medium">Выберите изображение кузова</label>
             <input class="form-control form-control-lg bg-light" type="file" id="formFile" name="file" required>
@@ -69,9 +131,9 @@
               <label for="damageConf" class="form-label fw-medium text-secondary">Уверенность повреждения</label>
               <div class="d-flex align-items-center">
                 <input type="range" class="form-range me-3" id="damageConf" name="damage_conf" 
-                      min="0.0" max="1.0" step="0.01" value="0.30"
-                      oninput="damageConfVal.innerText = this.value">
-                <span class="badge bg-primary px-3 py-2" id="damageConfVal">0.30</span>
+                      min="0.05" max="1.0" step="0.01" value="0.30"
+                      oninput="damageConfVal.innerText = Number(this.value).toFixed(2)">
+                <span class="badge bg-primary p-2 text-center font-monospace fs-6" id="damageConfVal" style="width: 75px;">0.30</span>
               </div>
               <div class="form-text mt-2"><small>Меньше значение — больше мелких дефектов.</small></div>
             </div>
@@ -80,9 +142,9 @@
               <label for="partConf" class="form-label fw-medium text-secondary">Уверенность детали</label>
               <div class="d-flex align-items-center">
                 <input type="range" class="form-range me-3" id="partConf" name="part_conf" 
-                      min="0.0" max="1.0" step="0.01" value="0.20"
-                      oninput="partConfVal.innerText = this.value">
-                <span class="badge bg-primary px-3 py-2" id="partConfVal">0.20</span>
+                      min="0.05" max="1.0" step="0.01" value="0.20"
+                      oninput="partConfVal.innerText = Number(this.value).toFixed(2)">
+               <span class="badge bg-primary p-2 text-center font-monospace fs-6" id="partConfVal" style="width: 75px;">0.20</span>
               </div>
               <div class="form-text mt-2"><small>Меньше значение — больше распознанных деталей.</small></div>
             </div>
@@ -91,9 +153,9 @@
               <label for="partIntersect" class="form-label fw-medium text-secondary">Пересечение с деталью</label>
               <div class="d-flex align-items-center">
                 <input type="range" class="form-range me-3" id="partIntersect" name="part_overlap" 
-                      min="0.0" max="1.0" step="0.01" value="0.20"
-                      oninput="partIntersectVal.innerText = this.value">
-                <span class="badge bg-primary px-3 py-2" id="partIntersectVal">0.20</span>
+                      min="0.05" max="1.0" step="0.01" value="0.20"
+                      oninput="partIntersectVal.innerText = Number(this.value).toFixed(2)">
+                <span class="badge bg-primary py-2 text-center font-monospace fs-6" id="partIntersectVal" style="width: 60px;">0.20</span>
               </div>
               <div class="form-text mt-2"><small>Меньше значение — больше привязок к деталям.</small></div>
             </div>
@@ -204,6 +266,32 @@
   </footer>
   
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    async function runTestImage(imagePath, fileName) {
+      try {
+        // Load image from static folder
+        const response = await fetch(imagePath);
+        if (!response.ok) {
+            throw new Error(`Файл ${fileName} не найден на сервере`);
+        }
+        
+        const blob = await response.blob();
+        
+        // File object creation
+        const file = new File([blob], fileName, { type: blob.type });
+        
+        const dataTransfer = new DataTransfer();
+        dataTransfer.items.add(file);
+        document.getElementById('formFile').files = dataTransfer.files;
+        
+        // Submit form
+        document.getElementById('uploadForm').submit();
+        
+      } catch (error) {
+        alert('Ошибка демо запуска: ' + error.message);
+      }
+    }
+  </script>
 </body>
 
 </html>
