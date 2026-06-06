@@ -4,68 +4,68 @@ import numpy as np
 from ultralytics import YOLO
 from ultralytics.engine.results import Results
 
+# Constants defining the class mappings
+DAMAGE_CLASSES = {
+    0: "dent",
+    1: "scratch",
+    2: "crack",
+    3: "glass_shatter",
+    4: "lamp_broken",
+    5: "tire_flat",
+}
+DAMAGES_TRASLATE = {
+    "dent": "Вмятина",
+    "scratch": "Царапина",
+    "crack": "Трещина",
+    "glass_shatter": "Разбитое стекло",
+    "lamp_broken": "Разбитая фара",
+    "tire_flat": "Спущенное колесо",
+}
+PART_CLASSES = {
+    0: "_background_",
+    1: "back_bumper",
+    2: "back_door",
+    3: "back_glass",
+    4: "back_light",
+    5: "front_bumper",
+    6: "front_door",
+    7: "front_glass",
+    8: "front_light",
+    9: "hood",
+    10: "mirror",
+    11: "trunk_tailgate",
+    12: "wheel",
+}
+PARTS_TRANSLATE = {
+    "_background_": "_background_",
+    "back_bumper": "Бампер",
+    "back_door": "Дверь",
+    "back_glass": "Стекло",
+    "back_light": "Фара",
+    "front_bumper": "Бампер",
+    "front_door": "Дверь",
+    "front_glass": "Стекло",
+    "front_light": "Фара",
+    "hood": "Капот",
+    "mirror": "Зеркало",
+    "trunk_tailgate": "Багажник",
+    "wheel": "Колесо",
+    "body": "Кузов",
+}
+SELF_LOCATING_DAMAGES = {
+    "tire_flat": "wheel",
+    "lamp_broken": "front_light",
+    "glass_shatter": "front_glass",
+}
+
 
 class DamagesAnnotator:
-    # Constants defining the class mappings
-    DAMAGE_CLASSES = {
-        0: "dent",
-        1: "scratch",
-        2: "crack",
-        3: "glass_shatter",
-        4: "lamp_broken",
-        5: "tire_flat",
-    }
-    DAMAGES_TRASLATE = {
-        "dent": "Вмятина",
-        "scratch": "Царапина",
-        "crack": "Трещина",
-        "glass_shatter": "Разбитое стекло",
-        "lamp_broken": "Разбитая фара",
-        "tire_flat": "Спущенное колесо",
-    }
-    PART_CLASSES = {
-        0: "_background_",
-        1: "back_bumper",
-        2: "back_door",
-        3: "back_glass",
-        4: "back_light",
-        5: "front_bumper",
-        6: "front_door",
-        7: "front_glass",
-        8: "front_light",
-        9: "hood",
-        10: "mirror",
-        11: "trunk_tailgate",
-        12: "wheel",
-    }
-    PARTS_TRANSLATE = {
-        "_background_": "_background_",
-        "back_bumper": "Бампер",
-        "back_door": "Дверь",
-        "back_glass": "Стекло",
-        "back_light": "Фара",
-        "front_bumper": "Бампер",
-        "front_door": "Дверь",
-        "front_glass": "Стекло",
-        "front_light": "Фара",
-        "hood": "Капот",
-        "mirror": "Зеркало",
-        "trunk_tailgate": "Багажник",
-        "wheel": "Колесо",
-        "body": "Кузов",
-    }
-    SELF_LOCATING_DAMAGES = {
-        "tire_flat": "wheel",
-        "lamp_broken": "front_light",
-        "glass_shatter": "front_glass",
-    }
-
     def __init__(self, damages_yolo_path: str, parts_yolo_path: str) -> None:
         self.damage_model = YOLO(damages_yolo_path, task="segment")
         self.part_model = YOLO(parts_yolo_path, task="segment")
 
+    @staticmethod
     def map_damages_to_parts(
-        self,
         damage_result: Results,
         part_result: Results,
         overlap_threshold: float = 0.2,
@@ -106,17 +106,15 @@ class DamagesAnnotator:
         )
 
         for d_idx, d_mask in enumerate(d_masks):
-            d_name = self.DAMAGE_CLASSES.get(
-                d_classes[d_idx], "unknown_damage"
-            )
+            d_name = DAMAGE_CLASSES.get(d_classes[d_idx], "unknown_damage")
             damage_confidence = float(
                 damage_result.boxes[d_idx].conf[0].cpu().numpy()
             )
-            if d_name in self.SELF_LOCATING_DAMAGES:
+            if d_name in SELF_LOCATING_DAMAGES:
                 mapped_damages.append(
                     (
                         d_name,
-                        self.SELF_LOCATING_DAMAGES[d_name],
+                        SELF_LOCATING_DAMAGES[d_name],
                         damage_confidence,
                     )
                 )
@@ -131,7 +129,7 @@ class DamagesAnnotator:
                 for p_idx, p_mask in enumerate(p_masks):
                     intersection_area = np.sum(d_mask & p_mask)
                     if (intersection_area / d_area) >= overlap_threshold:
-                        p_name = self.PART_CLASSES.get(
+                        p_name = PART_CLASSES.get(
                             p_classes[p_idx], "unknown_part"
                         )
                         mapped_damages.append(
@@ -146,7 +144,8 @@ class DamagesAnnotator:
         # Return deduplicated list preserving order
         return list(dict.fromkeys(mapped_damages))
 
-    def draw_damages(self, damage_result):
+    @staticmethod
+    def draw_damages(damage_result):
         annotated_damage = damage_result.plot(
             masks=True, boxes=True, labels=True
         )
@@ -156,12 +155,13 @@ class DamagesAnnotator:
         ax.axis("off")
         return fig
 
-    def rename_damages_parts(self, mapped_damages):
+    @staticmethod
+    def rename_damages_parts(mapped_damages):
         for i, damage in enumerate(mapped_damages):
             d_name, p_name, conf = damage
             translated = (
-                self.DAMAGES_TRASLATE[d_name],
-                self.PARTS_TRANSLATE[p_name],
+                DAMAGES_TRASLATE[d_name],
+                PARTS_TRANSLATE[p_name],
                 conf,
             )
             mapped_damages[i] = translated

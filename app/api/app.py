@@ -7,7 +7,6 @@ from fastapi import (
     FastAPI,
     File,
     Form,
-    HTTPException,
     Request,
     Response,
     UploadFile,
@@ -15,14 +14,10 @@ from fastapi import (
 )
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
-
-# from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from starlette.concurrency import run_in_threadpool
 
 from api.images_processing import fig_to_base64
-
-# from lib.images import PolygonDrawer, image_to_img_src, open_image
 from api.models_inference import get_model
 
 APP_STATS = {"total_requests": 0, "total_time": 0.0}
@@ -39,6 +34,7 @@ def get_index(request: Request) -> Response:
     return templates.TemplateResponse(request, "index.html")
 
 
+# test of model: damages in damaged and vice verse
 # mb add pure api section (think about routing) + pydantic
 @app.post("/", response_class=HTMLResponse)
 async def infer_model(
@@ -60,22 +56,46 @@ async def infer_model(
             ctx.update(
                 error="Файл не был отправлен или сессия истекла. Пожалуйста, выберите изображение заново."
             )
-            return templates.TemplateResponse(request, "index.html", ctx)
+            return templates.TemplateResponse(
+                request,
+                "index.html",
+                ctx,
+                status_code=status.HTTP_400_BAD_REQUEST,
+            )
 
         if file_size > MAX_FILE_SIZE:
-            raise HTTPException(
-                status_code=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE,
-                detail=f"Файл слишком большой ({round(file_size / (1024*1024), 2)} МБ). Максимальный размер — {MAX_FILE_SIZE // (1024*1024)} МБ.",
+            ctx.update(
+                error=f"Файл слишком большой ({round(file_size / (1024*1024), 2)} МБ). Максимальный размер — {MAX_FILE_SIZE // (1024*1024)} МБ."
             )
+            return templates.TemplateResponse(
+                request,
+                "index.html",
+                ctx,
+                status_code=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE,
+            )
+            # raise HTTPException(
+            #     status_code=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE,
+            #     detail=,
+            # )
+
         image = np.frombuffer(file_bytes, np.uint8)
         image = cv2.imdecode(image, cv2.IMREAD_COLOR)
+        if image is None:
+            ctx.update(
+                error="Не удалось распознать формат изображения. Пожалуйста, загрузите валидный JPG/PNG."
+            )
+            return templates.TemplateResponse(
+                request,
+                "index.html",
+                ctx,
+                status_code=status.HTTP_400_BAD_REQUEST,
+            )
+
         damages_img, mapped_damages = await run_in_threadpool(
             model.annotate, image, part_overlap, part_conf, damage_conf
         )
 
         for damage_type, part, confidence in mapped_damages:
-            # draw.highlight_word(coords, word)
-            # cropped_word_image = draw.crop(coords)
             damages.append(
                 {
                     "damage_type": damage_type,
@@ -100,5 +120,14 @@ async def infer_model(
         )
 
     except Exception as err:
-        ctx.update(error=str(err))
+        ctx.update(
+            error=f"Внутренняя ошибка сервера при обработке модели: {type(err).__name__}"
+        )
+        return templates.TemplateResponse(
+            request,
+            "index.html",
+            ctx,
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+        )
+
     return templates.TemplateResponse(request, "index.html", ctx)
