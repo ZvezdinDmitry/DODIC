@@ -24,21 +24,21 @@ jobs:
       run: uv python install
 
     - name: Install dependencies
-      run: uv pip install -e . --all-extras || uv pip install -r pyproject.toml
-
+      run: uv sync --group dev
+      
     - name: Check imports order (isort)
-      run: uv run isort --check-only .
+      run: uvx isort --check-only .
 
     - name: Check code formatting (black)
-      run: uv run black --check .
+      run: uvx black --check .
 
     - name: Lint with flake8
       run: |
-        uv run flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-        uv run flake8 . --count --exit-zero --max-complexity=10 --max-line-length=90 --statistics
+        uvx flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+        uvx flake8 . --count --exit-zero --max-complexity=10 --max-line-length=90 --statistics
 
     - name: Type checking with mypy
-      run: uv run mypy .
+      run: uvx mypy .
 
     - name: Run tests (pytest)
       run: uv run pytest app/tests/
