@@ -31,5 +31,15 @@
 - `DICE`
 - `Intersection over Union`
 
+## Запуск сервиса
+Для локального запуска:
+```
+docker compose up -d
+```
+`http://localhost:8000/` -  сам сервис для аннотации изображений
+`http://localhost:3000/` - Grafana с готовым дашбордом мониторинга DODIC Observability
+`http://localhost:8089/` - запуск нагрузочного тестирования через Locust
+
+
 ## Источники
 1. X. Wang, W. Li and Z. Wu, "CarDD: A New Dataset for Vision-Based Car Damage Detection" in IEEE Transactions on Intelligent Transportation Systems, vol. 24, no. 7, pp. 7202-7214, July 2023, doi: 10.1109/TITS.2023.3258480.
