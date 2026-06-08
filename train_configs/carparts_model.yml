@@ -1,0 +1,18 @@
+mlflow:
+  tracking_uri: "mlflow_logs"
+  experiment_name: "Carparts_train"
+  autolog: true
+
+model:
+  checkpoint: "yolo11n-seg.pt"          
+  data_yaml: "data2/carparts_yolo_annotation/carparts.yaml"
+
+training:
+  epochs: 50 # test 5
+  batch: 8 # test 4 
+  device: 0                           
+  project: "Carparts_train"
+  name: "yolo_11n_run_50epochs_augs_default_multi_scale"
+  exist_ok: true
+  amp: false
+  multi_scale: 0.25

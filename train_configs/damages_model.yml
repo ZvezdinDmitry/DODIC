@@ -1,0 +1,18 @@
+mlflow:
+  tracking_uri: "mlflow_logs"
+  experiment_name: "CarDD_merged_train"
+  autolog: true
+
+model:
+  checkpoint: "yolo11n-seg.pt"      
+  data_yaml: "data2/cardd_merged_yolo_annotation/cardd.yaml"
+
+training:
+  epochs: 50 # test 5
+  batch: 16 # test 4 
+  device: 0                            
+  project: "CarDD_merged_train"
+  name: "yolo_11_run_50epochs_augs_default_multi_scale"
+  exist_ok: true
+  amp: false
+  multi_scale: 0.25
