@@ -43,9 +43,7 @@ def download_kaggle(dataset_path: str | Path, folder: str | Path):
     """
     folder = Path(folder)
     folder.mkdir(exist_ok=True, parents=True)
-    path = kagglehub.dataset_download(
-        str(dataset_path), output_dir=str(folder)
-    )
+    path = kagglehub.dataset_download(str(dataset_path), output_dir=str(folder))
     return path
 
 
@@ -213,19 +211,13 @@ def load_and_process_datasets(data_folder="data"):
         data_folder (str, optional): Defaults to "data".
     """
     data_folder = Path(data_folder)
-    path_carparts = download_kaggle(
-        CARPARTS_KAGGLE_PATH, data_folder / "carparts"
-    )
+    path_carparts = download_kaggle(CARPARTS_KAGGLE_PATH, data_folder / "carparts")
     print("Carparts loaded")
-    process_carparts_to_yolo(
-        path_carparts, data_folder / "carparts_yolo_annotation"
-    )
+    process_carparts_to_yolo(path_carparts, data_folder / "carparts_yolo_annotation")
 
     path_cardd = download_kaggle(CARDD_KAGGLE_PATH, data_folder / "cardd")
     print("CarDD loaded")
-    process_cardd_to_yolo(
-        path_cardd, data_folder / "cardd_merged_yolo_annotation"
-    )
+    process_cardd_to_yolo(path_cardd, data_folder / "cardd_merged_yolo_annotation")
     merge_and_create_empty_masks(
         data_folder / "carparts_yolo_annotation",
         data_folder / "cardd_merged_yolo_annotation",

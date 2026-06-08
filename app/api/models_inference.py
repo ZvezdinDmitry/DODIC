@@ -88,9 +88,9 @@ class DamagesAnnotator:
             classes = result.boxes.cls.cpu().numpy().astype(int)
 
             resized_masks = [
-                cv2.resize(
-                    m, (orig_w, orig_h), interpolation=cv2.INTER_NEAREST
-                ).astype(bool)
+                cv2.resize(m, (orig_w, orig_h), interpolation=cv2.INTER_NEAREST).astype(
+                    bool
+                )
                 for m in masks_data
             ]
             return np.array(resized_masks), classes
@@ -107,9 +107,7 @@ class DamagesAnnotator:
 
         for d_idx, d_mask in enumerate(d_masks):
             d_name = DAMAGE_CLASSES.get(d_classes[d_idx], "unknown_damage")
-            damage_confidence = float(
-                damage_result.boxes[d_idx].conf[0].cpu().numpy()
-            )
+            damage_confidence = float(damage_result.boxes[d_idx].conf[0].cpu().numpy())
             if d_name in SELF_LOCATING_DAMAGES:
                 mapped_damages.append(
                     (
@@ -129,12 +127,8 @@ class DamagesAnnotator:
                 for p_idx, p_mask in enumerate(p_masks):
                     intersection_area = np.sum(d_mask & p_mask)
                     if (intersection_area / d_area) >= overlap_threshold:
-                        p_name = PART_CLASSES.get(
-                            p_classes[p_idx], "unknown_part"
-                        )
-                        mapped_damages.append(
-                            (d_name, p_name, damage_confidence)
-                        )
+                        p_name = PART_CLASSES.get(p_classes[p_idx], "unknown_part")
+                        mapped_damages.append((d_name, p_name, damage_confidence))
 
             # 2. Check intersection with unannotated regions (the "body")
             unannotated_intersection = np.sum(d_mask & (~union_part_mask))
@@ -146,9 +140,7 @@ class DamagesAnnotator:
 
     @staticmethod
     def draw_damages(damage_result):
-        annotated_damage = damage_result.plot(
-            masks=True, boxes=True, labels=True
-        )
+        annotated_damage = damage_result.plot(masks=True, boxes=True, labels=True)
         img_damage_rgb = cv2.cvtColor(annotated_damage, cv2.COLOR_BGR2RGB)
         fig, ax = plt.subplots(figsize=(6, 6))
         ax.imshow(img_damage_rgb)
@@ -179,9 +171,7 @@ class DamagesAnnotator:
             image, conf=damages_conf, verbose=False
         )
         damage_result = damage_result[0]
-        part_result = self.part_model.predict(
-            image, conf=parts_conf, verbose=False
-        )
+        part_result = self.part_model.predict(image, conf=parts_conf, verbose=False)
         part_result = part_result[0]
         mapped_damages = self.map_damages_to_parts(
             damage_result, part_result, overlap_threshold

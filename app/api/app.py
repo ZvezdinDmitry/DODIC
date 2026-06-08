@@ -123,9 +123,7 @@ async def infer_model(
         current_request_time = time.time() - start_time
         APP_STATS["total_requests"] += 1
         APP_STATS["total_time"] += current_request_time
-        average_request_time = (
-            APP_STATS["total_time"] / APP_STATS["total_requests"]
-        )
+        average_request_time = APP_STATS["total_time"] / APP_STATS["total_requests"]
         base64_image = await run_in_threadpool(fig_to_base64, damages_img)
         ctx.update(
             image=base64_image,
