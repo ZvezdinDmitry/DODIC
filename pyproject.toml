@@ -4,6 +4,9 @@ version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
+
+known_first_party = ["app", "api"]
+
 dependencies = [
     "albumentations>=2.0.8",
     "fastapi[standard]>=0.136.3",
@@ -21,3 +24,9 @@ dev = [
     "ipykernel>=7.2.0",
     "pytest>=9.0.3",
 ]
+
+[tool.isort]
+profile = "black"
+known_first_party = ["app", "api"]
+line_length = 90
+

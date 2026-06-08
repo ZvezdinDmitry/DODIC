@@ -4,7 +4,6 @@ server:
   http_listen_port: 3100
   grpc_listen_port: 9096
 
-# Глобальные настройки для всех компонентов монолита
 common:
   instance_addr: 127.0.0.1
   path_prefix: /tmp/loki
@@ -15,9 +14,8 @@ common:
   replication_factor: 1
   ring:
     kvstore:
-      store: inmemory # Все кольца (ingester, distributor) хранятся только в памяти
+      store: inmemory
 
-# Настройки приема логов
 ingester:
   lifecycler:
     address: 127.0.0.1
@@ -31,17 +29,14 @@ ingester:
   chunk_target_size: 1048576
   chunk_retain_period: 30s
 
-# ОТКЛЮЧАЕМ CONSUL ДЛЯ ДИСТРИБЬЮТОРА
 distributor:
   ring:
     kvstore:
       store: inmemory
 
-# ОТКЛЮЧАЕМ CONSUL ДЛЯ ПЛАНИРОВЩИКА (SCHEDULER)
 frontend:
   scheduler_address: ""
 
-# Локальный компактор
 compactor:
   working_directory: /tmp/loki/compactor
   compaction_interval: 10m

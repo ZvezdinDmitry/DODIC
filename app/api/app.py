@@ -18,31 +18,21 @@ from fastapi.templating import Jinja2Templates
 from prometheus_fastapi_instrumentator import Instrumentator
 from starlette.concurrency import run_in_threadpool
 
-from api.images_processing import fig_to_base64
-from api.models_inference import get_model
+from app.api.images_processing import fig_to_base64
+from app.api.models_inference import get_model
 
 APP_STATS = {"total_requests": 0, "total_time": 0.0}
 MAX_FILE_SIZE = 1 * 1024 * 1024
 
 app = FastAPI()
-app.mount("/static", StaticFiles(directory="static"))
+app.mount("/static", StaticFiles(directory="app/static"))
 
-templates = Jinja2Templates(directory="templates")
+templates = Jinja2Templates(directory="app/templates")
 
 instrumentator = Instrumentator(
     should_group_status_codes=False,
     # should_ignore_untargeted=True,
 )
-
-# instrumentator.add(metrics.request_latency_histograms())
-# instrumentator.add(metrics.request_size_bytes_histograms())
-# instrumentator.add(metrics.response_size_bytes_histograms())
-# instrumentator.add(
-#     metrics.requests_in_progress(
-#         metric_name="http_requests_in_progress", labels={"handler": "handler"}
-#     )
-# )
-
 instrumentator.instrument(app).expose(app, endpoint="/metrics")
 
 
@@ -71,7 +61,10 @@ async def infer_model(
 
         if file_size == 0:
             ctx.update(
-                error="Файл не был отправлен или сессия истекла. Пожалуйста, выберите изображение заново."
+                error=(
+                    "Файл не был отправлен или сессия истекла."
+                    + "Пожалуйста, выберите изображение заново."
+                )
             )
             return templates.TemplateResponse(
                 request,
@@ -82,7 +75,10 @@ async def infer_model(
 
         if file_size > MAX_FILE_SIZE:
             ctx.update(
-                error=f"Файл слишком большой ({round(file_size / (1024*1024), 2)} МБ). Максимальный размер — {MAX_FILE_SIZE // (1024*1024)} МБ."
+                error=(
+                    f"Файл слишком большой ({round(file_size / (1024*1024), 2)} МБ)."
+                    + f"Максимальный размер — {MAX_FILE_SIZE // (1024*1024)} МБ."
+                )
             )
             return templates.TemplateResponse(
                 request,
@@ -99,7 +95,10 @@ async def infer_model(
         image = cv2.imdecode(image, cv2.IMREAD_COLOR)
         if image is None:
             ctx.update(
-                error="Не удалось распознать формат изображения. Пожалуйста, загрузите валидный JPG/PNG."
+                error=(
+                    "Не удалось распознать формат изображения."
+                    + "Пожалуйста, загрузите валидный JPG/PNG."
+                )
             )
             return templates.TemplateResponse(
                 request,

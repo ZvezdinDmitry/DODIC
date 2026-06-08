@@ -1,8 +1,9 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import pytest
-from api.app import app
-from api.models_inference import get_model
+
+from app.api.app import app
+from app.api.models_inference import get_model
 
 
 class MockModel:

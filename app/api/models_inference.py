@@ -192,8 +192,8 @@ class DamagesAnnotator:
 
 
 def get_model(
-    damages_yolo_path: str = "models/damages_yolo.pt",
-    parts_yolo_path: str = "models/parts_yolo.pt",
+    damages_yolo_path: str = "app/models/damages_yolo.pt",
+    parts_yolo_path: str = "app/models/parts_yolo.pt",
 ) -> DamagesAnnotator:
     model = DamagesAnnotator(damages_yolo_path, parts_yolo_path)
     return model

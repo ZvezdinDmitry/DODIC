@@ -1,8 +1,9 @@
 import io
 
-from api.app import MAX_FILE_SIZE, app
 from fastapi.testclient import TestClient
 from PIL import Image
+
+from app.api.app import MAX_FILE_SIZE, app
 
 client = TestClient(app)
 
