@@ -8,6 +8,8 @@ dependencies = [
     "albumentations>=2.0.8",
     "fastapi[standard]>=0.136.3",
     "kagglehub>=1.0.1",
+    "locust>=2.44.1",
+    "prometheus-fastapi-instrumentator>=8.0.0",
     "protobuf==5.29.6",
     "python-multipart>=0.0.29",
     "ultralytics>=8.4.47",

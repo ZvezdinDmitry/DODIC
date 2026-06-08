@@ -15,6 +15,7 @@ from fastapi import (
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+from prometheus_fastapi_instrumentator import Instrumentator
 from starlette.concurrency import run_in_threadpool
 
 from api.images_processing import fig_to_base64
@@ -27,6 +28,22 @@ app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"))
 
 templates = Jinja2Templates(directory="templates")
+
+instrumentator = Instrumentator(
+    should_group_status_codes=False,
+    # should_ignore_untargeted=True,
+)
+
+# instrumentator.add(metrics.request_latency_histograms())
+# instrumentator.add(metrics.request_size_bytes_histograms())
+# instrumentator.add(metrics.response_size_bytes_histograms())
+# instrumentator.add(
+#     metrics.requests_in_progress(
+#         metric_name="http_requests_in_progress", labels={"handler": "handler"}
+#     )
+# )
+
+instrumentator.instrument(app).expose(app, endpoint="/metrics")
 
 
 @app.get("/", response_class=HTMLResponse)
