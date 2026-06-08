@@ -43,4 +43,4 @@ jobs:
       run: uv run mypy . --ignore-missing-imports
 
     - name: Run tests (pytest)
-      run: uv run pytest app/tests/
+      run: uv run pytest app/tests/*
