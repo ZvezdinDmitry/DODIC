@@ -69,8 +69,8 @@ class DamagesAnnotator:
         damage_result: Results,
         part_result: Results,
         overlap_threshold: float = 0.2,
-    ) -> list[tuple[str, str]]:
-        mapped_damages = []
+    ) -> list[tuple[str, str, float]]:
+        mapped_damages: list[tuple[str, str, float]] = []
 
         if not damage_result.masks or not damage_result.boxes:
             return mapped_damages
@@ -167,12 +167,12 @@ class DamagesAnnotator:
         parts_conf: float = 0.15,
         damages_conf: float = 0.3,
     ):
-        damage_result = self.damage_model.predict(
+        damage_results = self.damage_model.predict(
             image, conf=damages_conf, verbose=False
         )
-        damage_result = damage_result[0]
-        part_result = self.part_model.predict(image, conf=parts_conf, verbose=False)
-        part_result = part_result[0]
+        damage_result = damage_results[0]
+        part_results = self.part_model.predict(image, conf=parts_conf, verbose=False)
+        part_result = part_results[0]
         mapped_damages = self.map_damages_to_parts(
             damage_result, part_result, overlap_threshold
         )
