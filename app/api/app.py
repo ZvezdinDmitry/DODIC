@@ -92,8 +92,8 @@ async def infer_model(
             # )
 
         image = np.frombuffer(file_bytes, np.uint8)
-        image = cv2.imdecode(image, cv2.IMREAD_COLOR)
-        if image is None:
+        image_decoded = cv2.imdecode(image, cv2.IMREAD_COLOR)
+        if image_decoded is None:
             ctx.update(
                 error=(
                     "Не удалось распознать формат изображения."
@@ -108,7 +108,7 @@ async def infer_model(
             )
 
         damages_img, mapped_damages = await run_in_threadpool(
-            model.annotate, image, part_overlap, part_conf, damage_conf
+            model.annotate, image_decoded, part_overlap, part_conf, damage_conf
         )
 
         for damage_type, part, confidence in mapped_damages:

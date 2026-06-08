@@ -84,8 +84,8 @@ class DamagesAnnotator:
             if not result.masks or not result.boxes:
                 return np.array([]), np.array([])
 
-            masks_data = result.masks.data.cpu().numpy()
-            classes = result.boxes.cls.cpu().numpy().astype(int)
+            masks_data = result.masks.data.cpu().numpy()  # type: ignore
+            classes = result.boxes.cls.cpu().numpy().astype(int)  # type: ignore
 
             resized_masks = [
                 cv2.resize(m, (orig_w, orig_h), interpolation=cv2.INTER_NEAREST).astype(
