@@ -7,7 +7,7 @@ on:
     branches: [ "main"]
 
 jobs:
-  build-and-test:
+  check-and-test:
     runs-on: ubuntu-latest
 
     steps:
@@ -24,7 +24,9 @@ jobs:
       run: uv python install
 
     - name: Install dependencies
-      run: uv sync --group dev
+      run: | 
+        uv sync --group dev
+        uv pip install mypy
       
     - name: Check imports order (isort)
       run: uvx isort --check-only .
@@ -38,7 +40,7 @@ jobs:
         uvx flake8 . --count --exit-zero --max-complexity=10 --max-line-length=90 --statistics --exclude=.venv
 
     - name: Type checking with mypy
-      run: uvx mypy .
+      run: uv run mypy . --ignore-missing-imports
 
     - name: Run tests (pytest)
       run: uv run pytest app/tests/
