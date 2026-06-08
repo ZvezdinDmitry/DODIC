@@ -37,7 +37,9 @@
 docker compose up -d
 ```
 `http://localhost:8000/` -  сам сервис для аннотации изображений
+
 `http://localhost:3000/` - Grafana с готовым дашбордом мониторинга DODIC Observability
+
 `http://localhost:8089/` - запуск нагрузочного тестирования через Locust
 
 
